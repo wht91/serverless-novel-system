@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Serverless Noval system</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        form {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        button[type="submit"] {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        #resultContainer {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        
+        #resultContainer ul {
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+        
+        #resultContainer li {
+            margin-bottom: 5px;
+        }
+
+        #logoutButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Novel System</h1>
+        <form id="fetchForm">
+            <label for="authorInput">Enter Author:</label>
+            <br>
+            <input type="text" id="authorInput" name="authorInput" required>
+            <br>
+            <button type="submit">Search Data</button>
+        </form>
+        <div id="resultContainer"></div>
+        <button id="logoutButton" onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        function logout() {
+            window.location.href = 'https://login.com';
+        }
+
+        document.getElementById('fetchForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const author = document.getElementById('authorInput').value;
+
+            // Fetch data from the Lambda API
+            const response = await fetch('api from fetch dynamodb lambda function' + author);
+            const data = await response.json();
+
+            // Display the data in the result container
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = '';
+
+            if (response.ok) {
+                const ul = document.createElement('ul');
+                for (const key in data) {
+                    const li = document.createElement('li');
+                    li.innerText = `${key}: ${data[key]}`;
+                    ul.appendChild(li);
+                }
+                resultContainer.appendChild(ul);
+            } else {
+                resultContainer.innerText = data.message;
+            }
+        });
+    </script>
+</body>
+</html>
